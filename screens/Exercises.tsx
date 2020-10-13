@@ -118,7 +118,7 @@ const announceSet = (set: Set) => {
   const sentence = `${set.name} for ${set.duration} seconds`;
   Speech.speak(sentence, {
     rate: 1.5,
-    volume: Number.MAX_VALUE,
+    volume: 1,
   });
 };
 
