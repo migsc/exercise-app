@@ -38,51 +38,102 @@ const sets = [
 
 import { Text, View } from "../components/Themed";
 
-const useStopWatch = () => {
-  const [isRunning, setIsRunning] = React.useState(false);
-  const [secondsElapsed, setSecondsElapsed] = React.useState(0);
-  const [intervalID, setIntervalID] = React.useState<NodeJS.Timeout>();
-
-  const increment = () => setSecondsElapsed(secondsElapsed + 1);
+const useStopWatch = (): [
+  { seconds: number; running: boolean },
+  { start: () => void; pause: () => void; reset: () => void }
+] => {
+  const [seconds, setSeconds] = React.useState(0);
+  const [running, setIsRunning] = React.useState(false);
 
   const start = () => {
-    if (!intervalID) {
-      setIntervalID(setInterval(increment, 1000));
+    if (!running) {
+      setIsRunning(true);
     }
   };
 
-  const stop = () => {
-    clearInterval(intervalID);
+  const pause = () => {
+    if (running) {
+      setIsRunning(false);
+    }
+  };
+
+  const reset = () => {
+    if (running) {
+      pause();
+    }
+    setSeconds(0);
+  };
+
+  const increment = () => {
+    setSeconds((seconds) => seconds + 1);
   };
 
   React.useEffect(() => {
-    const intervalID = setInterval(() => increment, 1000);
-    return () => clearInterval(intervalID);
+    let interval: any = null;
+    if (running) {
+      interval = setInterval(increment, 1000);
+    } else if (!running && seconds !== 0) {
+      clearInterval(interval);
+    }
+    return () => clearInterval(interval);
+  }, [running, seconds]);
+
+  React.useEffect(() => {
+    return () => {
+      pause();
+    };
   }, []);
+
+  return [
+    {
+      seconds,
+      running,
+    },
+    { start, pause, reset },
+  ];
 };
 
 // const keyExtractor = (item, index) => index.toString();
 
 export default function Exercises() {
-  const [isRunning, setIsRunning] = React.useState(false);
   const [indexActiveSet, setIndexActiveSet] = React.useState(0);
 
-  useStopWatch();
+  const [
+    { seconds: totalSecondsElapsed, running: stopWatchIsRunning },
+    { start: startStopWatch, pause: pauseStopWatch, reset: resetStopWatch },
+  ] = useStopWatch();
 
   const handleStartWorkout = () => {
-    setIsRunning(true);
+    startStopWatch();
   };
 
   const handlePauseWorkout = () => {
-    setIsRunning(false);
+    pauseStopWatch();
+  };
+
+  const handleStopWorkout = () => {
+    resetStopWatch();
   };
 
   return (
     <View style={styles.container}>
       <Header
         containerStyle={styles.header}
+        leftComponent={
+          <Button
+            onPress={handleStopWorkout}
+            style={{ margin: 0, padding: 0 }}
+            icon={{
+              type: "font-awesome",
+              name: "stop",
+              size: 26,
+              color: "white",
+            }}
+          />
+        }
+        centerComponent={<Text>{totalSecondsElapsed}s</Text>}
         rightComponent={
-          isRunning ? (
+          stopWatchIsRunning ? (
             <Button
               onPress={handlePauseWorkout}
               style={{ margin: 0, padding: 0 }}
