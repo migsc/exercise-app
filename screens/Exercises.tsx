@@ -170,13 +170,6 @@ export default function Exercises() {
     }
   }, [laps]);
 
-  React.useEffect(() => {
-    (async () => {
-      const voices = await Speech.getAvailableVoicesAsync();
-      console.log({ voices });
-    })();
-  }, []);
-
   return (
     <View style={styles.container}>
       <Header
