@@ -33,14 +33,14 @@ const sets: Set[] = idify([
   {
     name: "wall sit",
     type: SetType.Timed,
-    duration: 45,
+    duration: 30,
   },
   {
     name: "rest",
     type: SetType.Timed,
     duration: 10,
   },
-  { name: "pushups", type: SetType.Timed, duration: 30, duration: 5 },
+  { name: "pushups", type: SetType.Timed, duration: 30 },
   {
     name: "rest",
     type: SetType.Timed,
@@ -95,7 +95,13 @@ const sets: Set[] = idify([
     duration: 10,
   },
   {
-    name: "side planks",
+    name: "side planks right side",
+    type: SetType.Timed,
+    duration: 60,
+    twoSided: true,
+  },
+  {
+    name: "side planks left side",
     type: SetType.Timed,
     duration: 60,
     twoSided: true,
@@ -106,6 +112,15 @@ const sets: Set[] = idify([
 import { Text, View } from "../components/Themed";
 
 // const keyExtractor = (item, index) => index.toString();
+
+const announceSet = (set: Set) => {
+  Speech.stop();
+  const sentence = `${set.name} for ${set.duration} seconds`;
+  Speech.speak(sentence, {
+    rate: 1.5,
+    volume: Number.MAX_VALUE,
+  });
+};
 
 export default function Exercises() {
   const [
@@ -127,7 +142,7 @@ export default function Exercises() {
 
   const handleStartWorkout = () => {
     startStopWatch();
-    Speech.speak(sets[indexCurrentSet].name);
+    announceSet(sets[indexCurrentSet]);
   };
 
   const handlePauseWorkout = () => {
@@ -141,9 +156,10 @@ export default function Exercises() {
   const handleMoveToNextSet = () => {
     if (indexCurrentSet === indexLast(sets)) {
       pauseStopWatch();
-      Speech.speak("done ");
+      Speech.stop();
+      Speech.speak("done");
     } else {
-      Speech.speak(sets[indexCurrentSet + 1].name);
+      announceSet(sets[indexCurrentSet + 1]);
       lapStopWatch();
     }
   };
