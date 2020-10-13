@@ -117,7 +117,6 @@ const announceSet = (set: Set) => {
   Speech.stop();
   const sentence = `${set.name} for ${set.duration} seconds`;
   Speech.speak(sentence, {
-    rate: 1.5,
     volume: 1,
   });
 };
@@ -170,6 +169,13 @@ export default function Exercises() {
       handleMoveToNextSet();
     }
   }, [laps]);
+
+  React.useEffect(() => {
+    (async () => {
+      const voices = await Speech.getAvailableVoicesAsync();
+      console.log({ voices });
+    })();
+  }, []);
 
   return (
     <View style={styles.container}>
