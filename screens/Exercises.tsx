@@ -1,49 +1,131 @@
 import * as React from "react";
 import { StyleSheet, FlatList } from "react-native";
 import { ListItem, Header, Button } from "react-native-elements";
+
 import dayjs from "dayjs";
 
-enum ExerciseType {
+const last = (arr: any[]) => arr[arr.length - 1];
+const indexLast = (arr: any[]) => arr.length - 1;
+const sum = (arr: number[]) => arr.reduce((total, n) => total + n, 0);
+const idify = (arr: any[]) => {
+  let i = -1;
+  return arr.map((item) => ({ id: (++i).toString(), ...item }));
+};
+
+enum SetType {
   Timed = "TIMED",
   Rep = "REP",
 }
 
-interface Exercise {
+interface Set {
+  id: string;
   name: string;
   type: string;
   duration?: number;
   reps?: number;
 }
 
-const sets = [
-  { name: "jumping jacks", type: ExerciseType.Timed, duration: 60 },
-  { name: "wall sit", type: ExerciseType.Timed, duration: 45 },
-  { name: "pushups", type: ExerciseType.Timed, duration: 30 },
-  { name: "box crunches", type: ExerciseType.Timed, duration: 60 },
-  { name: "step ups", type: ExerciseType.Timed, duration: 60 },
-  { name: "squats", type: ExerciseType.Timed, duration: 60 },
-  { name: "tricep dips", type: ExerciseType.Timed, duration: 60 },
-  { name: "plank core", type: ExerciseType.Timed, duration: 60 },
-  { name: "high knees", type: ExerciseType.Timed, duration: 60 },
-  { name: "lunges", type: ExerciseType.Timed, duration: 60 },
-  { name: "push up rotations", type: ExerciseType.Timed, duration: 60 },
+const sets: Set[] = idify([
+  {
+    name: "jumping jacks",
+    type: SetType.Timed,
+    duration: 60,
+  },
+  {
+    name: "rest",
+    type: SetType.Timed,
+    duration: 10,
+  },
+  {
+    name: "wall sit",
+    type: SetType.Timed,
+    duration: 45,
+  },
+  {
+    name: "rest",
+    type: SetType.Timed,
+    duration: 10,
+  },
+  { name: "pushups", type: SetType.Timed, duration: 30, duration: 5 },
+  {
+    name: "rest",
+    type: SetType.Timed,
+    duration: 10,
+  },
+  { name: "box crunches", type: SetType.Timed, duration: 60 },
+  {
+    name: "rest",
+    type: SetType.Timed,
+    duration: 10,
+  },
+  { name: "step ups", type: SetType.Timed, duration: 60 },
+  {
+    name: "rest",
+    type: SetType.Timed,
+    duration: 10,
+  },
+  { name: "squats", type: SetType.Timed, duration: 60 },
+  {
+    name: "rest",
+    type: SetType.Timed,
+    duration: 10,
+  },
+  { name: "tricep dips", type: SetType.Timed, duration: 60 },
+  {
+    name: "rest",
+    type: SetType.Timed,
+    duration: 10,
+  },
+  { name: "plank core", type: SetType.Timed, duration: 60 },
+  {
+    name: "rest",
+    type: SetType.Timed,
+    duration: 10,
+  },
+  { name: "high knees", type: SetType.Timed, duration: 60 },
+  {
+    name: "rest",
+    type: SetType.Timed,
+    duration: 10,
+  },
+  { name: "lunges", type: SetType.Timed, duration: 60 },
+  {
+    name: "rest",
+    type: SetType.Timed,
+    duration: 10,
+  },
+  { name: "push up rotations", type: SetType.Timed, duration: 60 },
+  {
+    name: "rest",
+    type: SetType.Timed,
+    duration: 10,
+  },
   {
     name: "side planks",
-    type: ExerciseType.Timed,
+    type: SetType.Timed,
     duration: 60,
     twoSided: true,
   },
   // more items
-];
+]);
 
 import { Text, View } from "../components/Themed";
 
 const useStopWatch = (): [
-  { seconds: number; running: boolean },
-  { start: () => void; pause: () => void; reset: () => void }
+  { seconds: number; laps: number[]; running: boolean; indexLap: number },
+  {
+    start: () => void;
+    pause: () => void;
+    reset: () => void;
+    lap: () => void;
+    getLapSeconds: (index: number) => number;
+    getCurrentLapSeconds: () => number;
+  }
 ] => {
-  const [seconds, setSeconds] = React.useState(0);
   const [running, setIsRunning] = React.useState(false);
+  const [seconds, setSeconds] = React.useState(0);
+  const [laps, setLaps] = React.useState([0]);
+  const indexLap = indexLast(laps);
 
   const start = () => {
     if (!running) {
@@ -62,10 +144,22 @@ const useStopWatch = (): [
       pause();
     }
     setSeconds(0);
+    setLaps([0]);
   };
+
+  const lap = () => {
+    setLaps((laps) => [...laps, 0]);
+  };
+
+  const getLapSeconds = (index: number) => {
+    return laps[index] || 0;
+  };
+
+  const getCurrentLapSeconds = () => laps[indexLap];
 
   const increment = () => {
     setSeconds((seconds) => seconds + 1);
+    setLaps((laps) => [...laps.slice(0, indexLast(laps)), last(laps) + 1]);
   };
 
   React.useEffect(() => {
@@ -78,29 +172,35 @@ const useStopWatch = (): [
     return () => clearInterval(interval);
   }, [running, seconds]);
 
-  React.useEffect(() => {
-    return () => {
-      pause();
-    };
-  }, []);
-
   return [
     {
       seconds,
+      laps,
       running,
+      indexLap,
     },
-    { start, pause, reset },
+    { start, pause, lap, reset, getLapSeconds, getCurrentLapSeconds },
   ];
 };
 
 // const keyExtractor = (item, index) => index.toString();
 
 export default function Exercises() {
-  const [indexActiveSet, setIndexActiveSet] = React.useState(0);
-
   const [
-    { seconds: totalSecondsElapsed, running: stopWatchIsRunning },
-    { start: startStopWatch, pause: pauseStopWatch, reset: resetStopWatch },
+    {
+      seconds: totalSecondsElapsed,
+      laps,
+      indexLap: indexCurrentSet,
+      running: stopWatchIsRunning,
+    },
+    {
+      start: startStopWatch,
+      pause: pauseStopWatch,
+      reset: resetStopWatch,
+      lap: lapStopWatch,
+      getLapSeconds,
+      getCurrentLapSeconds,
+    },
   ] = useStopWatch();
 
   const handleStartWorkout = () => {
@@ -115,6 +215,17 @@ export default function Exercises() {
     resetStopWatch();
   };
 
+  // Auto lapping
+  React.useEffect(() => {
+    if (getCurrentLapSeconds() === sets[indexCurrentSet].duration) {
+      if (indexCurrentSet === indexLast(sets)) {
+        pauseStopWatch();
+      } else {
+        lapStopWatch();
+      }
+    }
+  }, [laps]);
+
   return (
     <View style={styles.container}>
       <Header
@@ -122,7 +233,6 @@ export default function Exercises() {
         leftComponent={
           <Button
             onPress={handleStopWorkout}
-            style={{ margin: 0, padding: 0 }}
             icon={{
               type: "font-awesome",
               name: "stop",
@@ -131,12 +241,26 @@ export default function Exercises() {
             }}
           />
         }
-        centerComponent={<Text>{totalSecondsElapsed}s</Text>}
+        centerComponent={
+          <View style={{ flexDirection: "row" }}>
+            <Button
+              onPress={lapStopWatch}
+              type="font-awesome"
+              icon={{
+                name: "chevron-right",
+                size: 26,
+                color: "white",
+              }}
+            />
+            <Text>
+              {totalSecondsElapsed}s / {laps.join("+")} = {sum(laps)}
+            </Text>
+          </View>
+        }
         rightComponent={
           stopWatchIsRunning ? (
             <Button
               onPress={handlePauseWorkout}
-              style={{ margin: 0, padding: 0 }}
               icon={{
                 type: "font-awesome",
                 name: "pause",
@@ -147,7 +271,6 @@ export default function Exercises() {
           ) : (
             <Button
               onPress={handleStartWorkout}
-              style={{ margin: 0, padding: 0 }}
               icon={{
                 type: "font-awesome",
                 name: "play",
@@ -162,7 +285,7 @@ export default function Exercises() {
       <FlatList
         style={styles.list}
         data={sets}
-        renderItem={({ item }) => (
+        renderItem={({ item, index: indexSet }) => (
           <ListItem style={styles.listItem} key={item.name} bottomDivider>
             {/* <Icon name={item.icon} /> */}
             <ListItem.Content>
@@ -174,7 +297,9 @@ export default function Exercises() {
                 justifyContent: "flex-end",
               }}
             >
-              <ListItem.Title>{item.duration.toString()}s</ListItem.Title>
+              <ListItem.Title>
+                {item.duration - getLapSeconds(indexSet)}s [{indexSet}]
+              </ListItem.Title>
             </ListItem.Content>
           </ListItem>
         )}
