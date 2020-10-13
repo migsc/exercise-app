@@ -1,16 +1,10 @@
 import * as React from "react";
 import { StyleSheet, FlatList } from "react-native";
 import { ListItem, Header, Button } from "react-native-elements";
-
-import dayjs from "dayjs";
-
-const last = (arr: any[]) => arr[arr.length - 1];
-const indexLast = (arr: any[]) => arr.length - 1;
-const sum = (arr: number[]) => arr.reduce((total, n) => total + n, 0);
-const idify = (arr: any[]) => {
-  let i = -1;
-  return arr.map((item) => ({ id: (++i).toString(), ...item }));
-};
+import Constants from "expo-constants";
+import * as Speech from "expo-speech";
+import { indexLast, sum, idify } from "../utils";
+import useStopWatch from "../hooks/useStopWatch";
 
 enum SetType {
   Timed = "TIMED",
@@ -111,78 +105,6 @@ const sets: Set[] = idify([
 
 import { Text, View } from "../components/Themed";
 
-const useStopWatch = (): [
-  { seconds: number; laps: number[]; running: boolean; indexLap: number },
-  {
-    start: () => void;
-    pause: () => void;
-    reset: () => void;
-    lap: () => void;
-    getLapSeconds: (index: number) => number;
-    getCurrentLapSeconds: () => number;
-  }
-] => {
-  const [running, setIsRunning] = React.useState(false);
-  const [seconds, setSeconds] = React.useState(0);
-  const [laps, setLaps] = React.useState([0]);
-  const indexLap = indexLast(laps);
-
-  const start = () => {
-    if (!running) {
-      setIsRunning(true);
-    }
-  };
-
-  const pause = () => {
-    if (running) {
-      setIsRunning(false);
-    }
-  };
-
-  const reset = () => {
-    if (running) {
-      pause();
-    }
-    setSeconds(0);
-    setLaps([0]);
-  };
-
-  const lap = () => {
-    setLaps((laps) => [...laps, 0]);
-  };
-
-  const getLapSeconds = (index: number) => {
-    return laps[index] || 0;
-  };
-
-  const getCurrentLapSeconds = () => laps[indexLap];
-
-  const increment = () => {
-    setSeconds((seconds) => seconds + 1);
-    setLaps((laps) => [...laps.slice(0, indexLast(laps)), last(laps) + 1]);
-  };
-
-  React.useEffect(() => {
-    let interval: any = null;
-    if (running) {
-      interval = setInterval(increment, 1000);
-    } else if (!running && seconds !== 0) {
-      clearInterval(interval);
-    }
-    return () => clearInterval(interval);
-  }, [running, seconds]);
-
-  return [
-    {
-      seconds,
-      laps,
-      running,
-      indexLap,
-    },
-    { start, pause, lap, reset, getLapSeconds, getCurrentLapSeconds },
-  ];
-};
-
 // const keyExtractor = (item, index) => index.toString();
 
 export default function Exercises() {
@@ -205,6 +127,7 @@ export default function Exercises() {
 
   const handleStartWorkout = () => {
     startStopWatch();
+    Speech.speak(sets[indexCurrentSet].name);
   };
 
   const handlePauseWorkout = () => {
@@ -215,14 +138,20 @@ export default function Exercises() {
     resetStopWatch();
   };
 
+  const handleMoveToNextSet = () => {
+    if (indexCurrentSet === indexLast(sets)) {
+      pauseStopWatch();
+      Speech.speak("done ");
+    } else {
+      Speech.speak(sets[indexCurrentSet + 1].name);
+      lapStopWatch();
+    }
+  };
+
   // Auto lapping
   React.useEffect(() => {
     if (getCurrentLapSeconds() === sets[indexCurrentSet].duration) {
-      if (indexCurrentSet === indexLast(sets)) {
-        pauseStopWatch();
-      } else {
-        lapStopWatch();
-      }
+      handleMoveToNextSet();
     }
   }, [laps]);
 
@@ -235,27 +164,26 @@ export default function Exercises() {
             onPress={handleStopWorkout}
             icon={{
               type: "font-awesome",
-              name: "stop",
+              name: "times",
               size: 26,
               color: "white",
             }}
           />
         }
         centerComponent={
-          <View style={{ flexDirection: "row" }}>
+          stopWatchIsRunning ? (
             <Button
-              onPress={lapStopWatch}
-              type="font-awesome"
+              title="Skip"
+              type="solid"
               icon={{
-                name: "chevron-right",
+                name: "fast-forward",
                 size: 26,
                 color: "white",
               }}
+              iconRight
+              onPress={handleMoveToNextSet}
             />
-            <Text>
-              {totalSecondsElapsed}s / {laps.join("+")} = {sum(laps)}
-            </Text>
-          </View>
+          ) : null
         }
         rightComponent={
           stopWatchIsRunning ? (
@@ -284,6 +212,7 @@ export default function Exercises() {
 
       <FlatList
         style={styles.list}
+        contentContainerStyle={styles.listContent}
         data={sets}
         renderItem={({ item, index: indexSet }) => (
           <ListItem style={styles.listItem} key={item.name} bottomDivider>
@@ -298,7 +227,7 @@ export default function Exercises() {
               }}
             >
               <ListItem.Title>
-                {item.duration - getLapSeconds(indexSet)}s [{indexSet}]
+                {item.duration - getLapSeconds(indexSet)}s
               </ListItem.Title>
             </ListItem.Content>
           </ListItem>
@@ -323,6 +252,9 @@ const styles = StyleSheet.create({
   },
   list: {
     width: "100%",
+  },
+  listContent: {
+    paddingBottom: 100,
   },
   listItem: {},
   title: {
