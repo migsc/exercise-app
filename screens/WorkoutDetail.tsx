@@ -121,7 +121,7 @@ const announceSet = (set: Set) => {
   });
 };
 
-export default function Exercises() {
+export default function WorkoutDetail() {
   const [
     {
       seconds: totalSecondsElapsed,

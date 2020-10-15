@@ -1,21 +1,21 @@
-export type RootStackParamList = {
-  Root: undefined;
-  NotFound: undefined;
-};
-
 export type BottomTabParamList = {
-  TabOne: undefined;
-  TabTwo: undefined;
+  WorkoutsTab: undefined;
 };
 
-export type TabOneParamList = {
-  TabOneScreen: undefined;
+export type WorkoutsListParamList = {
+  WorkoutsListScreen: undefined;
+  // WorkoutDetailScreen: undefined;
 };
 
-export type TabTwoParamList = {
-  TabTwoScreen: undefined;
+export type WorkoutDetailParamList = {
+  WorkoutDetailScreen: undefined;
 };
 
-export type ExercisesParamList = {
-  ExercisesScreen: undefined;
+export type WorkoutsStackParamList = {
+  WorkoutsListScreen: undefined;
+  WorkoutDetailScreen: undefined;
+};
+
+export type RootStackParamList = {
+  WorkoutsList: WorkoutsListParamList;
 };

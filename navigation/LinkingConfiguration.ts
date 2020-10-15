@@ -6,19 +6,10 @@ export default {
     screens: {
       Root: {
         screens: {
-          TabOne: {
+          Workouts: {
             screens: {
-              TabOneScreen: "one",
-            },
-          },
-          TabTwo: {
-            screens: {
-              TabTwoScreen: "two",
-            },
-          },
-          Exercises: {
-            screens: {
-              ExercisesScreen: "exercises",
+              Workouts: "workouts",
+              WorkoutDetailScreen: "workouts/:id",
             },
           },
         },
