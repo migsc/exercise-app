@@ -1,10 +1,11 @@
 import * as React from "react";
-import { StyleSheet } from "react-native";
+import { StyleSheet, FlatList } from "react-native";
+import { ListItem, Header, Button } from "react-native-elements";
 import { StackNavigationProp } from "@react-navigation/stack";
-import { Button } from "react-native-elements";
 
 import { Text, View } from "../components/Themed";
-import { RootStackParamList } from "../types";
+import { RootStackParamList, Workout, SetType } from "../types";
+import { workouts } from "../data";
 
 type WorkoutsListNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -18,26 +19,50 @@ type Props = {
 export default function WorkoutsList({ navigation }: Props) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
-      <View
-        style={styles.separator}
-        lightColor="#eee"
-        darkColor="rgba(255,255,255,0.1)"
+      <FlatList
+        style={styles.list}
+        contentContainerStyle={styles.listContent}
+        data={workouts}
+        renderItem={({ item, index: indexSet }) => (
+          <ListItem
+            onPress={() =>
+              navigation.navigate("WorkoutDetailScreen", { workout: item })
+            }
+            style={styles.listItem}
+            key={item.name}
+            bottomDivider
+          >
+            <ListItem.Content>
+              <ListItem.Title>{item.name}</ListItem.Title>
+            </ListItem.Content>
+            <ListItem.Content
+              style={{
+                flexDirection: "row",
+                justifyContent: "flex-end",
+              }}
+            >
+              <ListItem.Chevron />
+            </ListItem.Content>
+          </ListItem>
+        )}
       />
-      <Button
-        onPress={() => navigation.navigate("WorkoutDetailScreen")}
-        title="go to workout detail "
-      ></Button>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
+    flexDirection: "column",
     alignItems: "center",
     justifyContent: "center",
   },
+  list: {
+    width: "100%",
+  },
+  listContent: {
+    paddingBottom: 100,
+  },
+  listItem: {},
   title: {
     fontSize: 20,
     fontWeight: "bold",

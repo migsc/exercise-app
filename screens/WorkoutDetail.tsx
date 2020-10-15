@@ -3,113 +3,12 @@ import { StyleSheet, FlatList } from "react-native";
 import { ListItem, Header, Button } from "react-native-elements";
 import Constants from "expo-constants";
 import * as Speech from "expo-speech";
-import { indexLast, sum, idify } from "../utils";
+import { indexLast, sum } from "../utils";
 import useStopWatch from "../hooks/useStopWatch";
+import { Set } from "../types";
 
-enum SetType {
-  Timed = "TIMED",
-  Rep = "REP",
-}
-
-interface Set {
-  id: string;
-  name: string;
-  type: string;
-  duration?: number;
-  reps?: number;
-}
-
-const sets: Set[] = idify([
-  {
-    name: "jumping jacks",
-    type: SetType.Timed,
-    duration: 60,
-  },
-  {
-    name: "rest",
-    type: SetType.Timed,
-    duration: 10,
-  },
-  {
-    name: "wall sit",
-    type: SetType.Timed,
-    duration: 30,
-  },
-  {
-    name: "rest",
-    type: SetType.Timed,
-    duration: 10,
-  },
-  { name: "pushups", type: SetType.Timed, duration: 30 },
-  {
-    name: "rest",
-    type: SetType.Timed,
-    duration: 10,
-  },
-  { name: "box crunches", type: SetType.Timed, duration: 60 },
-  {
-    name: "rest",
-    type: SetType.Timed,
-    duration: 10,
-  },
-  { name: "step ups", type: SetType.Timed, duration: 60 },
-  {
-    name: "rest",
-    type: SetType.Timed,
-    duration: 10,
-  },
-  { name: "squats", type: SetType.Timed, duration: 60 },
-  {
-    name: "rest",
-    type: SetType.Timed,
-    duration: 10,
-  },
-  { name: "tricep dips", type: SetType.Timed, duration: 60 },
-  {
-    name: "rest",
-    type: SetType.Timed,
-    duration: 10,
-  },
-  { name: "plank core", type: SetType.Timed, duration: 60 },
-  {
-    name: "rest",
-    type: SetType.Timed,
-    duration: 10,
-  },
-  { name: "high knees", type: SetType.Timed, duration: 60 },
-  {
-    name: "rest",
-    type: SetType.Timed,
-    duration: 10,
-  },
-  { name: "lunges", type: SetType.Timed, duration: 60 },
-  {
-    name: "rest",
-    type: SetType.Timed,
-    duration: 10,
-  },
-  { name: "push up rotations", type: SetType.Timed, duration: 60 },
-  {
-    name: "rest",
-    type: SetType.Timed,
-    duration: 10,
-  },
-  {
-    name: "side planks right side",
-    type: SetType.Timed,
-    duration: 60,
-    twoSided: true,
-  },
-  {
-    name: "side planks left side",
-    type: SetType.Timed,
-    duration: 60,
-    twoSided: true,
-  },
-  // more items
-]);
-
-import { Text, View } from "../components/Themed";
+import { View } from "../components/Themed";
+import { Workout } from "../types";
 
 // const keyExtractor = (item, index) => index.toString();
 
@@ -121,7 +20,17 @@ const announceSet = (set: Set) => {
   });
 };
 
-export default function WorkoutDetail() {
+type Props = {
+  route: { params: { workout: Workout } };
+};
+
+export default function WorkoutDetail({
+  route: {
+    params: {
+      workout: { sets },
+    },
+  },
+}: Props) {
   const [
     {
       seconds: totalSecondsElapsed,

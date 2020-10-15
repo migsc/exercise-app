@@ -19,3 +19,23 @@ export type WorkoutsStackParamList = {
 export type RootStackParamList = {
   WorkoutsList: WorkoutsListParamList;
 };
+
+export enum SetType {
+  Timed = "TIMED",
+  Rep = "REP",
+}
+
+export interface Set {
+  id: string;
+  name: string;
+  type: string;
+  duration?: number;
+  reps?: number;
+}
+
+export interface Workout {
+  id: string;
+  name: string;
+  dateLastCompleted?: Date;
+  sets: Set[];
+}
