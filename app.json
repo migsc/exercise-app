@@ -24,6 +24,7 @@
     "web": {
       "favicon": "./assets/images/favicon.png"
     },
-    "description": ""
+    "description": "A mobile app for high-intensity interval training.",
+    "githubUrl": "https://github.com/migsc/exercise-app.git"
   }
 }

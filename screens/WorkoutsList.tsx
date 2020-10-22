@@ -2,10 +2,11 @@ import * as React from "react";
 import { StyleSheet, FlatList } from "react-native";
 import { ListItem, Header, Button } from "react-native-elements";
 import { StackNavigationProp } from "@react-navigation/stack";
-
 import { Text, View } from "../components/Themed";
 import { RootStackParamList, Workout, SetType } from "../types";
-import { workouts } from "../data";
+import { workouts as workoutsInitialData } from "../data";
+import useAsyncStorageState from "../hooks/useAsyncStorageState";
+import AsyncStorage from "@react-native-community/async-storage";
 
 type WorkoutsListNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -17,8 +18,17 @@ type Props = {
 };
 
 export default function WorkoutsList({ navigation }: Props) {
+  const [workouts, setWorkouts] = useAsyncStorageState(
+    "@workouts",
+    workoutsInitialData
+  );
+
   return (
     <View style={styles.container}>
+      <Button
+        title="Add"
+        onPress={() => setWorkouts([...workouts, { name: "Test", sets: [] }])}
+      ></Button>
       <FlatList
         style={styles.list}
         contentContainerStyle={styles.listContent}

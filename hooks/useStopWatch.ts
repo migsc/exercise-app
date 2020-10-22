@@ -1,5 +1,6 @@
 import * as React from "react";
 import { indexLast, last } from "../utils";
+import AsyncStorage from "@react-native-community/async-storage";
 
 export default function useStopWatch(): [
   { seconds: number; laps: number[]; running: boolean; indexLap: number },
@@ -55,9 +56,9 @@ export default function useStopWatch(): [
   React.useEffect(() => {
     let interval: any = null;
     if (running) {
-      interval = setInterval(increment, 1000);
+      // interval = setInterval(increment, 1000);
     } else if (!running && seconds !== 0) {
-      clearInterval(interval);
+      // clearInterval(interval);
     }
     return () => clearInterval(interval);
   }, [running, seconds]);
