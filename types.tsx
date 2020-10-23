@@ -11,9 +11,14 @@ export type WorkoutDetailParamList = {
   WorkoutDetailScreen: undefined;
 };
 
+export type WorkoutEditParamList = {
+  WorkoutEditScreen: undefined;
+};
+
 export type WorkoutsStackParamList = {
   WorkoutsListScreen: undefined;
   WorkoutDetailScreen: undefined;
+  WorkoutEditScreen: undefined;
 };
 
 export type RootStackParamList = {

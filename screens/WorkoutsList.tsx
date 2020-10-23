@@ -1,12 +1,48 @@
 import * as React from "react";
-import { StyleSheet, FlatList } from "react-native";
+import { StyleSheet, FlatList, SafeAreaView } from "react-native";
 import { ListItem, Header, Button } from "react-native-elements";
 import { StackNavigationProp } from "@react-navigation/stack";
+import { v4 as uuid } from "uuid";
 import { Text, View } from "../components/Themed";
 import { RootStackParamList, Workout, SetType } from "../types";
 import { workouts as workoutsInitialData } from "../data";
 import useAsyncStorageState from "../hooks/useAsyncStorageState";
 import AsyncStorage from "@react-native-community/async-storage";
+import Icon from "react-native-vector-icons/FontAwesome";
+
+//() => setWorkouts([...workouts, { name: "Test", sets: [] }])
+
+type FloatingActionButtonProps = {
+  title?: string;
+  iconName?: string;
+  onPress?: any;
+};
+
+function FloatingActionButton({
+  title = "",
+  iconName = "question",
+  onPress = () => {},
+}: FloatingActionButtonProps) {
+  return (
+    <Button
+      containerStyle={{
+        position: "absolute",
+        // alignItems: "center",
+        // justifyContent: "center",
+        right: 30,
+        bottom: 30,
+      }}
+      buttonStyle={{
+        width: 65,
+        height: 65,
+        borderRadius: 65,
+      }}
+      title={title}
+      icon={<Icon name={iconName} size={15} color="white" />}
+      onPress={onPress}
+    />
+  );
+}
 
 type WorkoutsListNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -17,46 +53,60 @@ type Props = {
   navigation: WorkoutsListNavigationProp;
 };
 
+function getEmptyWorkout(): Workout {
+  return {
+    id: uuid(),
+    name: "Untitled",
+    sets: [],
+  };
+}
+
 export default function WorkoutsList({ navigation }: Props) {
   const [workouts, setWorkouts] = useAsyncStorageState(
     "@workouts",
     workoutsInitialData
   );
 
+  const handleViewWorkout = (workout) => {
+    navigation.navigate("WorkoutDetailScreen", { workout });
+  };
+
+  const handleAddWorkout = () => {
+    const workout = getEmptyWorkout();
+    navigation.navigate("WorkoutEditScreen", { workout });
+  };
+
   return (
-    <View style={styles.container}>
-      <Button
-        title="Add"
-        onPress={() => setWorkouts([...workouts, { name: "Test", sets: [] }])}
-      ></Button>
-      <FlatList
-        style={styles.list}
-        contentContainerStyle={styles.listContent}
-        data={workouts}
-        renderItem={({ item, index: indexSet }) => (
-          <ListItem
-            onPress={() =>
-              navigation.navigate("WorkoutDetailScreen", { workout: item })
-            }
-            style={styles.listItem}
-            key={item.name}
-            bottomDivider
-          >
-            <ListItem.Content>
-              <ListItem.Title>{item.name}</ListItem.Title>
-            </ListItem.Content>
-            <ListItem.Content
-              style={{
-                flexDirection: "row",
-                justifyContent: "flex-end",
-              }}
+    <>
+      <View style={styles.container}>
+        <FlatList
+          style={styles.list}
+          contentContainerStyle={styles.listContent}
+          data={workouts}
+          renderItem={({ item, index: indexSet }) => (
+            <ListItem
+              onPress={() => handleViewWorkout(item)}
+              style={styles.listItem}
+              key={item.name}
+              bottomDivider
             >
-              <ListItem.Chevron />
-            </ListItem.Content>
-          </ListItem>
-        )}
-      />
-    </View>
+              <ListItem.Content>
+                <ListItem.Title>{item.name}</ListItem.Title>
+              </ListItem.Content>
+              <ListItem.Content
+                style={{
+                  flexDirection: "row",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <ListItem.Chevron />
+              </ListItem.Content>
+            </ListItem>
+          )}
+        />
+      </View>
+      <FloatingActionButton iconName="plus" onPress={handleAddWorkout} />
+    </>
   );
 }
 

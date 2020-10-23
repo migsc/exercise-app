@@ -7,6 +7,7 @@ import Colors from "../constants/Colors";
 import useColorScheme from "../hooks/useColorScheme";
 import WorkoutsListScreen from "../screens/WorkoutsList";
 import WorkoutDetailScreen from "../screens/WorkoutDetail";
+import WorkoutEditScreen from "../screens/WorkoutEdit";
 import { BottomTabParamList, WorkoutsStackParamList } from "../types";
 
 const BottomTab = createBottomTabNavigator<BottomTabParamList>();
@@ -51,6 +52,11 @@ function WorkoutsNavigator() {
         name="WorkoutDetailScreen"
         component={WorkoutDetailScreen}
         options={{ headerTitle: "Workout Detail" }}
+      />
+      <WorkoutsStack.Screen
+        name="WorkoutEditScreen"
+        component={WorkoutEditScreen}
+        options={{ headerTitle: "Edit Workout" }}
       />
     </WorkoutsStack.Navigator>
   );

@@ -10,6 +10,7 @@ export default {
             screens: {
               Workouts: "workouts",
               WorkoutDetailScreen: "workouts/:id",
+              WorkoutEditScreen: "workouts/:id/edit",
             },
           },
         },
