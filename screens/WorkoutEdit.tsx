@@ -97,7 +97,7 @@ export default function WorkoutEdit({
         <ListItem
           //   onPress={() => handleViewWorkout(item)}
           containerStyle={styles.addForm}
-          bottomDivider
+          bottomDivide
         >
           <ListItem.Content>
             <Input

@@ -95,17 +95,27 @@ export const workouts: Workout[] = idify([
     ]),
   },
   {
-    name: "Jump Rope Pyramids",
+    name: "10 Min Beginner Jump Rope Workout",
     sets: idify([
       {
         name: "jump rope",
         type: SetType.Timed,
-        duration: 15,
+        duration: 20,
       },
       {
         name: "rest",
         type: SetType.Timed,
-        duration: 5,
+        duration: 10,
+      },
+      {
+        name: "jumping jacks",
+        type: SetType.Timed,
+        duration: 20,
+      },
+      {
+        name: "rest",
+        type: SetType.Timed,
+        duration: 10,
       },
       {
         name: "jump rope",
@@ -115,217 +125,17 @@ export const workouts: Workout[] = idify([
       {
         name: "rest",
         type: SetType.Timed,
-        duration: 6,
+        duration: 10,
       },
       {
-        name: "jump rope",
+        name: "air squats",
         type: SetType.Timed,
-        duration: 25,
-      },
-      {
-        name: "rest",
-        type: SetType.Timed,
-        duration: 7,
-      },
-      {
-        name: "jump rope",
-        type: SetType.Timed,
-        duration: 30,
-      },
-      {
-        name: "rest",
-        type: SetType.Timed,
-        duration: 8,
-      },
-      {
-        name: "jump rope",
-        type: SetType.Timed,
-        duration: 35,
-      },
-      {
-        name: "rest",
-        type: SetType.Timed,
-        duration: 9,
-      },
-      {
-        name: "jump rope",
-        type: SetType.Timed,
-        duration: 40,
+        duration: 20,
       },
       {
         name: "rest",
         type: SetType.Timed,
         duration: 10,
-      },
-      {
-        name: "jump rope",
-        type: SetType.Timed,
-        duration: 45,
-      },
-      {
-        name: "rest",
-        type: SetType.Timed,
-        duration: 10,
-      },
-      {
-        name: "jump rope",
-        type: SetType.Timed,
-        duration: 50,
-      },
-      {
-        name: "rest",
-        type: SetType.Timed,
-        duration: 10,
-      },
-      {
-        name: "jump rope",
-        type: SetType.Timed,
-        duration: 55,
-      },
-      {
-        name: "rest",
-        type: SetType.Timed,
-        duration: 10,
-      },
-      {
-        name: "jump rope",
-        type: SetType.Timed,
-        duration: 60,
-      },
-      {
-        name: "rest",
-        type: SetType.Timed,
-        duration: 10,
-      },
-      {
-        name: "jump rope",
-        type: SetType.Timed,
-        duration: 65,
-      },
-      {
-        name: "rest",
-        type: SetType.Timed,
-        duration: 10,
-      },
-      {
-        name: "jump rope",
-        type: SetType.Timed,
-        duration: 70,
-      },
-      {
-        name: "rest",
-        type: SetType.Timed,
-        duration: 10,
-      },
-      {
-        name: "jump rope",
-        type: SetType.Timed,
-        duration: 75,
-      },
-      {
-        name: "rest",
-        type: SetType.Timed,
-        duration: 10,
-      },
-      {
-        name: "jump rope",
-        type: SetType.Timed,
-        duration: 70,
-      },
-      {
-        name: "rest",
-        type: SetType.Timed,
-        duration: 10,
-      },
-      {
-        name: "jump rope",
-        type: SetType.Timed,
-        duration: 65,
-      },
-      {
-        name: "rest",
-        type: SetType.Timed,
-        duration: 10,
-      },
-      {
-        name: "jump rope",
-        type: SetType.Timed,
-        duration: 60,
-      },
-      {
-        name: "rest",
-        type: SetType.Timed,
-        duration: 10,
-      },
-      {
-        name: "jump rope",
-        type: SetType.Timed,
-        duration: 55,
-      },
-      {
-        name: "rest",
-        type: SetType.Timed,
-        duration: 10,
-      },
-      {
-        name: "jump rope",
-        type: SetType.Timed,
-        duration: 50,
-      },
-      {
-        name: "rest",
-        type: SetType.Timed,
-        duration: 10,
-      },
-      {
-        name: "jump rope",
-        type: SetType.Timed,
-        duration: 45,
-      },
-      {
-        name: "rest",
-        type: SetType.Timed,
-        duration: 10,
-      },
-      {
-        name: "jump rope",
-        type: SetType.Timed,
-        duration: 40,
-      },
-      {
-        name: "rest",
-        type: SetType.Timed,
-        duration: 10,
-      },
-      {
-        name: "jump rope",
-        type: SetType.Timed,
-        duration: 35,
-      },
-      {
-        name: "rest",
-        type: SetType.Timed,
-        duration: 9,
-      },
-      {
-        name: "jump rope",
-        type: SetType.Timed,
-        duration: 30,
-      },
-      {
-        name: "rest",
-        type: SetType.Timed,
-        duration: 8,
-      },
-      {
-        name: "jump rope",
-        type: SetType.Timed,
-        duration: 25,
-      },
-      {
-        name: "rest",
-        type: SetType.Timed,
-        duration: 7,
       },
       {
         name: "jump rope",
@@ -335,17 +145,147 @@ export const workouts: Workout[] = idify([
       {
         name: "rest",
         type: SetType.Timed,
-        duration: 6,
+        duration: 10,
       },
       {
-        name: "jump rope",
+        name: "pushups",
         type: SetType.Timed,
-        duration: 15,
+        duration: 20,
       },
       {
         name: "rest",
         type: SetType.Timed,
-        duration: 5,
+        duration: 10,
+      },
+      {
+        name: "jump rope",
+        type: SetType.Timed,
+        duration: 20,
+      },
+      {
+        name: "rest",
+        type: SetType.Timed,
+        duration: 10,
+      },
+      {
+        name: "high knees",
+        type: SetType.Timed,
+        duration: 20,
+      },
+      {
+        name: "rest",
+        type: SetType.Timed,
+        duration: 10,
+      },
+      {
+        name: "jump rope",
+        type: SetType.Timed,
+        duration: 20,
+      },
+      {
+        name: "rest",
+        type: SetType.Timed,
+        duration: 10,
+      },
+      {
+        name: "butt kickers",
+        type: SetType.Timed,
+        duration: 20,
+      },
+      {
+        name: "rest",
+        type: SetType.Timed,
+        duration: 10,
+      },
+      {
+        name: "jump rope",
+        type: SetType.Timed,
+        duration: 20,
+      },
+      {
+        name: "rest",
+        type: SetType.Timed,
+        duration: 10,
+      },
+      {
+        name: "front lunges",
+        type: SetType.Timed,
+        duration: 20,
+      },
+      {
+        name: "rest",
+        type: SetType.Timed,
+        duration: 10,
+      },
+      {
+        name: "jump rope",
+        type: SetType.Timed,
+        duration: 20,
+      },
+      {
+        name: "rest",
+        type: SetType.Timed,
+        duration: 10,
+      },
+      {
+        name: "jumping jacks",
+        type: SetType.Timed,
+        duration: 20,
+      },
+      {
+        name: "rest",
+        type: SetType.Timed,
+        duration: 10,
+      },
+      {
+        name: "jump rope",
+        type: SetType.Timed,
+        duration: 20,
+      },
+      {
+        name: "rest",
+        type: SetType.Timed,
+        duration: 10,
+      },
+      {
+        name: "air squats",
+        type: SetType.Timed,
+        duration: 20,
+      },
+      {
+        name: "rest",
+        type: SetType.Timed,
+        duration: 10,
+      },
+      {
+        name: "jump rope",
+        type: SetType.Timed,
+        duration: 20,
+      },
+      {
+        name: "rest",
+        type: SetType.Timed,
+        duration: 10,
+      },
+      {
+        name: "pushups",
+        type: SetType.Timed,
+        duration: 20,
+      },
+      {
+        name: "rest",
+        type: SetType.Timed,
+        duration: 10,
+      },
+      {
+        name: "high knees",
+        type: SetType.Timed,
+        duration: 20,
+      },
+      {
+        name: "rest",
+        type: SetType.Timed,
+        duration: 10,
       },
     ]),
   },

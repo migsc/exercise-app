@@ -1,6 +1,6 @@
 import * as React from "react";
-import { StyleSheet, FlatList } from "react-native";
-import { ListItem, Header, Button } from "react-native-elements";
+import { StyleSheet, FlatList, Text } from "react-native";
+import { Header, Button } from "react-native-elements";
 import Constants from "expo-constants";
 import * as Speech from "expo-speech";
 import { indexLast, sum } from "../utils";
@@ -139,22 +139,14 @@ export default function WorkoutDetail({
         contentContainerStyle={styles.listContent}
         data={sets}
         renderItem={({ item, index: indexSet }) => (
-          <ListItem style={styles.listItem} key={item.name} bottomDivider>
-            {/* <Icon name={item.icon} /> */}
-            <ListItem.Content>
-              <ListItem.Title>{item.name}</ListItem.Title>
-            </ListItem.Content>
-            <ListItem.Content
-              style={{
-                flexDirection: "row",
-                justifyContent: "flex-end",
-              }}
-            >
-              <ListItem.Title>
-                {item.duration - getLapSeconds(indexSet)}s
-              </ListItem.Title>
-            </ListItem.Content>
-          </ListItem>
+          <View style={styles.listItem} key={item.name}>
+            <View>
+              <Text>{item.name}</Text>
+            </View>
+            <View>
+              <Text>{item.duration - getLapSeconds(indexSet)}s</Text>
+            </View>
+          </View>
         )}
       />
     </View>
@@ -180,7 +172,13 @@ const styles = StyleSheet.create({
   listContent: {
     paddingBottom: 100,
   },
-  listItem: {},
+  listItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    padding: 16,
+    borderBottomWidth: StyleSheet.hairlineWidth,
+    borderBottomColor: "#e0e0e0",
+  },
   title: {
     fontSize: 20,
     fontWeight: "bold",
